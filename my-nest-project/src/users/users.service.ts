@@ -22,11 +22,22 @@ export class UsersService {
     };
   }
 
-  findAll(role: UserRole) {
+  findAll(role: UserRole, search: string) {
     if (role) {
       const userWithRole = this.users.filter((user) => user.role === role);
       return {
         users: userWithRole,
+      };
+    }
+    if (search) {
+      const userWithSearch = this.users.filter(
+        (user) =>
+          user.fullName.includes(search) ||
+          user.email.includes(search) ||
+          user.phoneNumber.includes(search),
+      );
+      return {
+        users: userWithSearch,
       };
     }
     return {
