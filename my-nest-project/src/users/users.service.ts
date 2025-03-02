@@ -24,9 +24,12 @@ export class UsersService {
 
   findAll(role: UserRole, search: string) {
     if (role) {
-      const userWithRole = this.users.filter((user) => user.role === role);
+      const usersWithRole = this.users.filter((user) => user.role === role);
+      if (usersWithRole.length === 0) {
+        throw new NotFoundException('Oops! User with role does not exist in our db');
+      }
       return {
-        users: userWithRole,
+        users: usersWithRole,
       };
     }
     if (search) {
@@ -36,6 +39,9 @@ export class UsersService {
           user.email.includes(search) ||
           user.phoneNumber.includes(search),
       );
+      if (userWithSearch.length === 0) {
+        throw new NotFoundException('Oops! User with search does not exist in our db');
+      }
       return {
         users: userWithSearch,
       };
